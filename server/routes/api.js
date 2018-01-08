@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const Photo = require('../model/photo')
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -7,7 +8,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/photos', (req, res) => {
-    res.json([{relativePath:'titi', name: 'model1'}, {relativePath: 'toto', name: 'model2'}])
+    let p1 = new Photo('titi', 'lili')
+    let p2 = new Photo('toto', 'lolo')
+    res.json([p1, p2])
 })
 
 module.exports = router
