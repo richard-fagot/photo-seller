@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { PhotosService } from './photos.service';
+
 import { AppComponent } from './app.component';
 import { PhotosComponent } from './photos/photos.component';
 import {AppRoutingModule} from './app-routing.module';
@@ -18,7 +20,7 @@ import {AppRoutingModule} from './app-routing.module';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [PhotosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

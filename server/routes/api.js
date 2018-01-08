@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/photos', (req, res) => {
-    res.json({toto:'titi'})
+    res.json([{relativePath:'titi', name: 'model1'}, {relativePath: 'toto', name: 'model2'}])
 })
 
 module.exports = router

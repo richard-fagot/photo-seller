@@ -1,3 +1,8 @@
-<p>
-  photos works!
-</p>
+<div class="container">
+  <div class="row" *ngFor="let photo of photos">
+    <div class="card card-block">
+      <h4 class="card-title">{{ photo.relativePath }}</h4>
+      <p class="card-text">{{photo.name}}</p>
+    </div>
+  </div>
+</div>
