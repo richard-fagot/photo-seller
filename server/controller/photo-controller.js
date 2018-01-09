@@ -4,28 +4,34 @@ const path = require('path')
 const fs = require('fs')
 
 module.exports = {
-    thumbRootDir: './thumb',
+    thumbDir: './thumb',
     photoDir: './photos',
 
+    /*
+        return an array of path to photos.
+    */
     getPhotosPaths: function() {
         let pattern = this.photoDir + "/**/*.jpg"
         return new Promise(function(resolve, reject) {
             glob(pattern, null, function(err, photosPaths) {
                 if(err) return reject(err);
-                console.log('::getPhotoPath')
-                console.log(photosPaths)
                 resolve(photosPaths)
             })
         })
     }, 
 
+    /*
+        Given a path to a photo, create a thumbnail
+        in the *thumbDir* respecting the directory
+        structure.
+    */
     createThumbnail: function (photoPath) {
         let fileName = path.win32.basename(photoPath)
         let photoDir = path.dirname(photoPath).replace('./','')
         let directories = photoDir.split('/')
 
         // Create the whole directory structure from ./thumb
-        let depthDir = this.thumbRootDir
+        let depthDir = this.thumbDir
         for(let i = 0 ; i < directories.length ; i++) {
             depthDir += path.sep + directories[i]
             if(!fs.existsSync(depthDir)) {
