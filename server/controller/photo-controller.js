@@ -2,6 +2,7 @@ const glob = require('glob')
 const sharp = require('sharp')
 const path = require('path')
 const fs = require('fs')
+const Photo = require('../model/photo')
 
 module.exports = {
     thumbDir: './thumb',
@@ -25,9 +26,11 @@ module.exports = {
         in the *thumbDir* respecting the directory
         structure.
     */
-    createThumbnail: function (photoPath) {
+    createThumbnail: function (photo) {
+        let photoPath = photo.relativePath
         let fileName = path.win32.basename(photoPath)
-        let photoDir = path.dirname(photoPath).replace('./','')
+        //Get the photos relative path without the begining / (slash)
+        let photoDir = path.dirname(photoPath).substring(1)
         let directories = photoDir.split('/')
 
         // Create the whole directory structure from ./thumb

@@ -15,8 +15,8 @@ router.get('/photos', (req, res) => {
     .then(paths => {
                     console.log(paths)
                     photos = paths.map(path => new Photo(path.replace('./photos', '')))
-                    paths.forEach(path => {
-                        photoController.createThumbnail(path)
+                    photos.forEach(photo => {
+                        photoController.createThumbnail(photo)
                     });
                     res.json(photos)
                 })
