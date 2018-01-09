@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Photo = require('../model/photo')
+const photoController = require('../controller/photo-controller')
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -8,9 +9,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/photos', (req, res) => {
-    let p1 = new Photo('titi', 'lili')
-    let p2 = new Photo('toto', 'lolo')
-    res.json([p1, p2])
+    let photos = []
+
+    photoController.getPhotosPaths()
+    .then(paths => {
+                    console.log(paths)
+                    photos = paths.map(path => new Photo(path.replace('./photos', '')))
+                    paths.forEach(path => {
+                        photoController.createThumbnail(path)
+                    });
+                    res.json(photos)
+                })
 })
 
 module.exports = router

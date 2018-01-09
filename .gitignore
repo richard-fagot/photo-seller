@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+/thumb/**
 
 # dependencies
 /node_modules
