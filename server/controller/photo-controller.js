@@ -43,6 +43,8 @@ module.exports = {
         }
 
         let dirName = depthDir
+        let thumbPath = dirName+'/'+'tb_'+fileName
+        photo.thumbnail = thumbPath
         sharp(photoPath).resize(300, 300).toFile(dirName+'/'+'tb_'+fileName)
     }
 }
