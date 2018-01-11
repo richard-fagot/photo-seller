@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row" *ngFor="let photo of photos">
     <div class="card card-block">
-      <h4 class="card-title"><a href="{{ photo.relativePath }}">{{ photo.relativePath }}</a></h4>
+      <h4 class="card-title"><a href="{{ photo.relativeURI }}">{{ photo.relativeURI }}</a></h4>
       <p class="card-text">{{photo.name}}</p>
       <img src="{{ photo.thumbnail }}">
     </div>

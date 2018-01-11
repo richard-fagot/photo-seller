@@ -1,5 +1,5 @@
 export class Photo {
-    relativePath: string;
+    relativeURI: string;
     name: string;
     thumbnail: string;
 }

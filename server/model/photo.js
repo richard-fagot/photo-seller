@@ -1,6 +1,6 @@
 class Photo {
-    constructor(relativePath, name, thumbnail) {
-        this.relativePath = relativePath
+    constructor(relativeURI, name, thumbnail) {
+        this.relativeURI = relativeURI
         this.thumbnail = thumbnail
         this.name = name
     }

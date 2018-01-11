@@ -14,7 +14,7 @@ router.get('/photos', (req, res) => {
     photoController.getPhotosPaths()
     .then(paths => {
                     console.log(paths)
-                    photos = paths.map(path => new Photo(path.replace('./photos', '')))
+                    photos = paths.map(path => new Photo(path.replace(photoController.assetsLocation, '')))
                     photos.forEach(photo => {
                         photoController.createThumbnail(photo)
                     });
