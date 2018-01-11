@@ -1,9 +1,11 @@
-<div class="container">
-  <div class="row" *ngFor="let photo of photos">
-    <div class="card card-block">
-      <h4 class="card-title"><a href="{{ photo.relativeURI }}">{{ photo.relativeURI }}</a></h4>
-      <p class="card-text">{{photo.name}}</p>
-      <img src="{{ photo.thumbnail }}">
-    </div>
+<div class="container-fluid">
+  <div class="row">
+      <div class="card" style="width: 12rem;" *ngFor="let photo of photos">
+        <img class="card-img-top" src="{{ photo.thumbnail }}">
+        <div class="card-body">
+          <h5 class="card-title">{{photo.name}}</h5>
+          <p class="card-text"><a href="{{ photo.relativeURI }}">{{ photo.relativeURI }}</a></p>
+        </div>
+      </div>
   </div>
 </div>

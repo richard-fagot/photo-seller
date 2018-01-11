@@ -3,7 +3,7 @@
 # compiled output
 /dist
 /tmp
-/assets/thumb/**
+/assets/img/thumb/**
 
 # dependencies
 /node_modules

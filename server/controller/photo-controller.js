@@ -54,6 +54,6 @@ module.exports = {
         let thumbPath = thumbnailBasedir + path.sep + 'tb_' + photoFileName
         photo.thumbnail = thumbPath.substring(this.assetsLocation.length)
         console.log('Create thumbnail ' + thumbPath )
-        sharp(photoToMinifyPath).resize(300, 300).toFile(thumbPath)
+        sharp(photoToMinifyPath).resize(150, 150).toFile(thumbPath)
     }
 }
