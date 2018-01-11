@@ -12,6 +12,7 @@ module.exports = {
     imgLocation: './assets/img',
     thumbLocation: './assets/img/thumb',
     photoLocation: './assets/img/photos',
+
     /*
         return an array of path to photos.
     */
@@ -24,6 +25,47 @@ module.exports = {
             })
         })
     }, 
+
+    /*
+        Returns an array of {Photo}
+        @return {Array[Photo]} 
+    */
+    getPhotos: function() {
+         // Init DB if not exists
+        // Load existing photos from DB
+        // Parse photo directories
+        let photoController = this
+        return new Promise(function(resolve, reject){
+            let photos = []
+            photoController.getPhotosPaths()
+                .then(photoPaths => {
+                    console.log(photoPaths)
+                    photos = photoPaths.map(photoPath =>
+                        new Photo(photoPath.replace(photoController.assetsLocation, '')
+                                    ,'NONAME'
+                                    , null
+                                    , path.win32.basename(photoPath, '.jpg'))
+                    )
+                    photos.forEach(photo => {
+                        photoController.createThumbnail(photo)
+                    })
+                    resolve(photos)
+                })
+        })
+        // Search for added and deleted Photos
+        // Update DB
+        // return photos
+    },
+    
+    /*
+        Create or delete photos.
+        @param {Array} photoPaths
+    */
+    createOrDeletePhotos: function(photoPaths) {
+
+    },
+
+    
 
     /*
         Given a path to a photo, create a thumbnail

@@ -10,21 +10,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/photos', (req, res) => {
-    let photos = []
-
-    photoController.getPhotosPaths()
-    .then(paths => {
-                    console.log(paths)
-                    photos = paths.map(photoPath => 
-                        new Photo(photoPath.replace(photoController.assetsLocation, '')
-                                , 'NONAME'
-                                , null
-                                , path.win32.basename(photoPath, '.jpg')))
-                    photos.forEach(photo => {
-                        photoController.createThumbnail(photo)
-                    });
-                    res.json(photos)
-                })
+    photoController.getPhotos().then(photos => res.json(photos)).catch(console.log('oups'))
+    //res.json(photoController.getPhotosPaths())
 })
 
 module.exports = router
