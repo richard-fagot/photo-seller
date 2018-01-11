@@ -53,7 +53,10 @@ module.exports = {
         let photoFileName = path.win32.basename(photoToMinifyPath)
         let thumbPath = thumbnailBasedir + path.sep + 'tb_' + photoFileName
         photo.thumbnail = thumbPath.substring(this.assetsLocation.length)
-        console.log('Create thumbnail ' + thumbPath )
-        sharp(photoToMinifyPath).resize(150, 150).toFile(thumbPath)
+
+        if(!fs.existsSync(thumbPath)) {
+            console.log('Create thumbnail ' + thumbPath )
+            sharp(photoToMinifyPath).resize(150, 150).toFile(thumbPath)
+        }
     }
 }
