@@ -7,12 +7,14 @@ import { PhotosService } from './photos.service';
 
 import { AppComponent } from './app.component';
 import { PhotosComponent } from './photos/photos.component';
+import {CommandesComponent} from './commandes/commandes.component';
 import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PhotosComponent
+    PhotosComponent,
+    CommandesComponent
   ],
   imports: [
     BrowserModule,
