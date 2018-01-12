@@ -53,23 +53,32 @@ var getPhotos = function() {
 */
 var createPhotosFromPaths = function(photoPaths) {
     console.log("Entering ::createPhotosFromPaths()")
+
     return new Promise(function(resolve, reject){
-        let photos = []
         console.log("Paths are " + photoPaths)
-        photos = photoPaths.map(photoPath =>
-            new Photo(photoPath.replace(assetsLocation, '')
-                        ,'NONAME'
-                        , null
-                        , path.win32.basename(photoPath, '.jpg'))
-        )
-        photos.forEach(photo => {
-            createThumbnail(photo)
-        })
+
+        let photos = photoPaths.map(photoPath => createPhotoFromPath(photoPath))
         resolve(photos)  
     })
 }
     
+/*
+    @param {string} photoPath
+    @return {Photo} 
+*/
+var createPhotoFromPath = function (photoPath) {
+    let relativeURI = photoPath.replace(assetsLocation, '')
+    let modelName = 'NONAME'
+    let thumbnail = createThumbnail(relativeURI)
+    let fileName = path.win32.basename(photoPath, '.jpg')
 
+    let photo = new Photo(relativeURI
+                        , modelName
+                        , thumbnail
+                        , fileName)
+   
+   return photo
+}                     
 /*
         Create or delete photos.
         @param {Array} photoPaths
@@ -82,10 +91,13 @@ var createOrDeletePhotos = function(photoPaths) {
         Given a path to a photo, create a thumbnail
         in the *thumbLocation* respecting the directory
         structure.
+
+        @param {string} relativeURIToPhoto
+        @return {string} relative URI to the thumbnail
 */
-var createThumbnail = function (photo) {
+var createThumbnail = function (relativeURIToPhoto) {
     console.log("Entering ::createThumbnail()")
-    let photoToMinifyPath = assetsLocation + photo.relativeURI
+    let photoToMinifyPath = assetsLocation + relativeURIToPhoto
     console.log('Photo to minify ' + photoToMinifyPath)
 
     //Get only the directory structure of the user
@@ -106,12 +118,14 @@ var createThumbnail = function (photo) {
     let thumbnailBasedir = depthDir
     let photoFileName = path.win32.basename(photoToMinifyPath)
     let thumbPath = thumbnailBasedir + path.sep + 'tb_' + photoFileName
-    photo.thumbnail = thumbPath.substring(assetsLocation.length)
+    let thumbnail = thumbPath.substring(assetsLocation.length)
 
     if(!fs.existsSync(thumbPath)) {
         console.log('Create thumbnail ' + thumbPath )
         sharp(photoToMinifyPath).resize(150, 150).toFile(thumbPath)
     }
+
+    return thumbnail;
 }
 
 
