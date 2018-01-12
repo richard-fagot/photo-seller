@@ -10,8 +10,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/photos', (req, res) => {
-    photoController.getPhotos().then(photos => res.json(photos)).catch(console.log('oups'))
-    //res.json(photoController.getPhotosPaths())
+    photoController.getPhotos()
+      .then(photos => res.json(photos))
+      .catch(console.log('oups'))
 })
 
 module.exports = router
