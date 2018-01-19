@@ -10,62 +10,38 @@ const createDB = function() {
     console.log('---- ::createDB')
     let p = Promise.resolve()
     if(!fs.existsSync(dbFileName)) {
+        console.log('---- db does not exist')
         p = persist(emptyDB)
     }
 
     return p.then(data => {return data})
-/*    
-    return new Promise(function(resolve, reject) {
-        console.log('---- ::createDB')
-        if(!fs.existsSync(dbFileName)) {
-            persist(emptyDB).then(resolve())
-        }
-        resolve()
-        console.log('---- End ::createDB')
-    })
-*/
 }
 
 /**
  * @returns promise database
  */
 const loadDB = function() {
-    console.log('---- ::loadDB')
-    return new Promise(function(resolve, reject) {
+
+return new Promise(function(resolve, reject) {
+        console.log('---- ::loadDB')
         if(!fs.existsSync(dbFileName)) reject('Database not found')
         let data = fs.readFileSync(dbFileName)
         console.log('::loadDB data: ' + data)
+        console.log('::loadDB data stringify: ' + data)
         let jsonDB = JSON.parse(data)
         resolve(jsonDB)
     })
 }
-
 /**
  * Persist a full database given as argument.
  * 
- * @param {jason} wholeDatabase
+ * @param {json} wholeDatabase
  */
 const persist = function(wholeDatabase) {
     console.log('---- ::persist')
     let data = JSON.stringify(wholeDatabase)
     console.log('persist data ' + data)
-    return writeFile(dbFileName).then( data => {return data})
-/*
-    return new Promise(function(resolve, reject) {
-        console.log('---- ::persist')
-        let data = JSON.stringify(wholeDatabase)
-        console.log('persist data ' + data)
-        fs.writeFile(dbFileName, data, (err) => {
-            console.log('write file')
-            if(err) {
-                console.log(err) 
-                throw err
-            }
-            resolve(data)
-        })
-        console.log('---- End ::persist')
-    })
-*/
+    return writeFile(dbFileName, data).then( data => {return data})
 }
 
 /**
@@ -73,16 +49,14 @@ const persist = function(wholeDatabase) {
  * @param {Photo} photo 
  */
 const persistPhoto = function(photo) {
-    return new Promise(function(resolve, reject) {
-        console.log('---- ::persistPhoto')
-        loadDB()
+    console.log('---- ::persistPhoto')
+    return loadDB()
         .then(
             db => {
-                saveOrUpdatePhoto(db, photo)
                 console.log('---- End ::persistPhoto')
+                return saveOrUpdatePhoto(db, photo)
             })
-        .then(photoSavedOrUpdated => resolve(photoSavedOrUpdated))
-    })
+        .then(photoSavedOrUpdated => {return photoSavedOrUpdated})
 }
 
 /**
@@ -91,27 +65,28 @@ const persistPhoto = function(photo) {
  * @param {Photo} photo 
  */
 const saveOrUpdatePhoto = function(db, photo) {
-    return new Promise(function(resolve, reject){
         console.log('---- ::saveOrUpdatePhoto')
-        findPhotoIndex(db, photo)
+        return findPhotoIndex(db, photo)
         .then(
             existingPhotoIndex => {
+                console.log('existingPhotoIndex ' + existingPhotoIndex)
                 if(existingPhotoIndex === null) {
                     addPhoto(db, photo)
                 } else {
                     db.photos[existingPhotoIndex] = photo
                 }
-                console.log('SoU ' + JSON.stringify(db))
-                persist(db)
+                console.log('SaveOrUpdate ' + JSON.stringify(db))
+                return persist(db)
             }
         )
-        .then(resolve(photo))
-        console.log('---- End ::saveOrUpdatePhoto')
         
-    })
-    
 }
 
+/**
+ * Add the given photo into the db without persisting in file.
+ * @param {*} db 
+ * @param {*} photo 
+ */
 const addPhoto = function(db, photo) {
     console.log('---- ::addPhoto')
     db.photoIndex++
@@ -120,6 +95,7 @@ const addPhoto = function(db, photo) {
     console.log('addPhoto' + JSON.stringify(db))
     console.log('---- End ::addPhoto')
 }
+
 /**
  * 
  * @param {json} db 
@@ -127,20 +103,24 @@ const addPhoto = function(db, photo) {
  * @returns photo found index or null
  */
 const findPhotoIndex = function(db, photo) {
-    console.log('---- ::findPhotoIndex')
     return new Promise(function(resolve, reject) {
-        if(photo.id === null || photo.id === 'undefined') {
+        photoID = null
+        console.log('---- ::findPhotoIndex')
+        if(photo.id == null) {
             db.photos.forEach(currentPhoto => {
                 if(currentPhoto.relativeURI === photo.relativeURI) {
-                    resolve(currentPhoto.id)
+                    console.log('Photo found in DB !')
+                    photoID = currentPhoto.id
                 }
             })
             // no photo found in db
-            resolve(null)
+            console.log('no photo found in db')
+        } else {
+            console.log('Photo already has an id ' + photo.id)
+            photoID = photo.id
         }
-        resolve(photo.id)
+        resolve(photoID)
     })
-    console.log('---- End ::findPhotoIndex')
 }
 
 const readFile = function(filename) {
@@ -162,9 +142,10 @@ const readFile = function(filename) {
 };
 
 const writeFile = function(path, data) {
+    console.log('---- ::writeFile')
     return new Promise(function(resolve, reject) {
         fs.writeFile(path, data, (err) => {
-            console.log('write file')
+            console.log('write file' + JSON.stringify(data))
             if(err) {
                 console.log(err) 
                 reject(err)
@@ -179,4 +160,8 @@ module.exports = {
     persist: persist,
     loadDB: loadDB,
     persistPhoto: persistPhoto
+
+
+    // For test
+    ,saveOrUpdatePhoto: saveOrUpdatePhoto
 }

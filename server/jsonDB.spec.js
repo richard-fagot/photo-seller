@@ -5,22 +5,21 @@ const fs = require('fs')
 if(fs.existsSync(jsonDB.dbFileName)) fs.unlinkSync(jsonDB.dbFileName)
 
 jsonDB.createDB()
-.catch(err => console.log("erreur1: " + err))
-    .then(() => jsonDB.loadDB())
-    .catch(err => console.log("erreur2: " + err))
+    .then(() => { console.log('---- INIT : loadDB') 
+                    return jsonDB.loadDB()})
     .then(
         db => {
-            console.log('Test setup First load ')
-            console.log(JSON.stringify(db))
-            testPersistPhoto()
+            console.log('---- Test setup First load ')
+            console.log('---- INIT loadDB returns: ' + JSON.stringify(db))
+            return testPersistPhoto()
     })
-    .catch(err => console.log("erreur3: " + err))
+    .catch(err => console.log("erreur: " + err))
 
 
 const testPersistPhoto = function() {
     console.log('---- Begin testPersistPhoto')
     let photo = new Photo('relative', 'thumb', 'name', 'filename')
-    jsonDB.persistPhoto(photo)
+    return jsonDB.persistPhoto(photo)
         .then(
             () => 
             jsonDB.loadDB().then(json =>  {
