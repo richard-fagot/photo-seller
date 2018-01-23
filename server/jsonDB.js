@@ -41,7 +41,7 @@ const persist = function(wholeDatabase) {
     console.log('---- ::persist')
     let data = JSON.stringify(wholeDatabase)
     console.log('persist data ' + data)
-    return writeFile(dbFileName, data).then( data => {return data})
+    return writeFile(dbFileName, data).then( wholeDatabase => {return wholeDatabase})
 }
 
 /**
